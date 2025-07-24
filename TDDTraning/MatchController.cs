@@ -89,7 +89,7 @@ public class MatchController
 
         match.MatchResult = newResult;
         await _matchRepository.UpdateAsync(match);
-        return GetDisplayResult(newResult);
+        return match.GetDisplayResult();
     }
 
     private bool CanCancelGoal(string result, char goalType)
@@ -120,38 +120,6 @@ public class MatchController
         }
 
         return result[^1] == goalType;
-    }
-
-    public string GetDisplayResult(string matchResult)
-    {
-        int homeGoals = 0;
-        int awayGoals = 0;
-        int periodCount = 1;
-
-        foreach (char c in matchResult)
-        {
-            switch (c)
-            {
-                case 'H':
-                    homeGoals++;
-                    break;
-                case 'A':
-                    awayGoals++;
-                    break;
-                case ';':
-                    periodCount++;
-                    break;
-            }
-        }
-
-        string period = periodCount switch
-        {
-            1 => "First Half",
-            2 => "Second Half",
-            _ => $"Extra Time {periodCount - 2}"
-        };
-
-        return $"{homeGoals}:{awayGoals} ({period})";
     }
 
     public async Task<string> QueryMatchResult(int matchId)
