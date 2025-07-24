@@ -1,5 +1,6 @@
 ﻿using Xunit;
 using Moq;
+using TDDTraning.Modles;
 
 namespace TDDTraning.Tests;
 

@@ -1,26 +1,6 @@
-﻿namespace TDDTraning;
+﻿using TDDTraning.Modles;
 
-public enum MatchEvent
-{
-    HomeGoal,
-    AwayGoal,
-    NextPeriod,
-    HomeCancel,
-    AwayCancel
-}
-
-public class UpdateMatchResultException : Exception
-{
-    public MatchEvent MatchEvent { get; }
-    public string OriginalMatchResult { get; }
-
-    public UpdateMatchResultException(string message, MatchEvent matchEvent, string originalMatchResult) 
-        : base(message)
-    {
-        MatchEvent = matchEvent;
-        OriginalMatchResult = originalMatchResult;
-    }
-}
+namespace TDDTraning;
 
 public class MatchController
 {
@@ -34,9 +14,11 @@ public class MatchController
     public async Task<string> UpdateMatchResultAsync(int matchId, MatchEvent matchEvent)
     {
         var match = await _matchRepository.GetByIdAsync(matchId);
+        
+        // Create new match if it doesn't exist
         if (match == null)
         {
-            match = new Match { Id = matchId };
+            match = new Match { Id = matchId, MatchResult = string.Empty };
         }
 
         string currentResult = match.MatchResult;
@@ -57,18 +39,18 @@ public class MatchController
                 if (!CanCancelGoal(currentResult, 'H'))
                     throw new UpdateMatchResultException("Cannot cancel goal if the last goal type is different with cancel goal type", matchEvent, currentResult);
 
-                // 如果最后一个字符是分号，不删除分号，而是寻找并删除最后一个H
+                // If the last character is a semicolon, don't delete the semicolon, but find and delete the last H
                 if (currentResult.Length > 0 && currentResult[^1] == ';')
                 {
-                    // 创建一个可变的字符列表
+                    // Create a mutable character list
                     var chars = currentResult.ToCharArray().ToList();
 
-                    // 从后向前查找H字符
+                    // Search for H character from back to front
                     for (int i = chars.Count - 2; i >= 0; i--)
                     {
                         if (chars[i] == 'H')
                         {
-                            chars.RemoveAt(i); // 删除找到的H
+                            chars.RemoveAt(i); // Delete the found H
                             break;
                         }
                     }
@@ -77,25 +59,25 @@ public class MatchController
                 }
                 else
                 {
-                    newResult = currentResult[..^1]; // 普通情况，删除最后一个字符
+                    newResult = currentResult[..^1]; // Normal case, delete the last character
                 }
                 break;
             case MatchEvent.AwayCancel:
                 if (!CanCancelGoal(currentResult, 'A'))
                     throw new UpdateMatchResultException("Cannot cancel goal if the last goal type is different with cancel goal type", matchEvent, currentResult);
 
-                // 如果最后一个字符是分号，不删除分号，而是寻找并删除最后一个A
+                // If the last character is a semicolon, don't delete the semicolon, but find and delete the last A
                 if (currentResult.Length > 0 && currentResult[^1] == ';')
                 {
-                    // 创建一个可变的字符列表
+                    // Create a mutable character list
                     var chars = currentResult.ToCharArray().ToList();
 
-                    // 从后向前查找A字符
+                    // Search for A character from back to front
                     for (int i = chars.Count - 2; i >= 0; i--)
                     {
                         if (chars[i] == 'A')
                         {
-                            chars.RemoveAt(i); // 删除找到的A
+                            chars.RemoveAt(i); // Delete the found A
                             break;
                         }
                     }
@@ -104,7 +86,7 @@ public class MatchController
                 }
                 else
                 {
-                    newResult = currentResult[..^1]; // 普通情况，删除最后一个字符
+                    newResult = currentResult[..^1]; // Normal case, delete the last character
                 }
                 break;
             default:
@@ -121,20 +103,20 @@ public class MatchController
         if (string.IsNullOrEmpty(result))
             return false;
 
-        // 如果最后一个字符是分号，我们需要检查前一个字符
+        // If the last character is a semicolon, we need to check the previous character
         if (result[^1] == ';')
         {
-            // 确保有前一个字符可以检查
+            // Ensure there is a previous character to check
             if (result.Length > 1)
             {
-                // 找到最后一个非分号字符
+                // Find the last non-semicolon character
                 int i = result.Length - 2;
                 while (i >= 0 && result[i] == ';')
                 {
                     i--;
                 }
 
-                // 如果找到了非分号字符，检查它是否是目标类型
+                // If a non-semicolon character is found, check if it is the target type
                 if (i >= 0)
                 {
                     return result[i] == goalType;
