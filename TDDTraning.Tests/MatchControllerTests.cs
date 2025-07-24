@@ -106,7 +106,7 @@ public class MatchControllerTests
     }
 
     [Fact]
-    public async Task UpdateMatchResult_WithNullMatch_ShouldThrowNullReferenceException()
+    public async Task UpdateMatchResult_WithNullMatch_ShouldThrowArgumentException()
     {
         // Arrange
         var mockRepository = new Mock<IMatchRepository>();
@@ -118,8 +118,11 @@ public class MatchControllerTests
             .ReturnsAsync((Match?)null);
 
         // Act & Assert
-        await Assert.ThrowsAsync<NullReferenceException>(() => 
+        var exception = await Assert.ThrowsAsync<ArgumentException>(() => 
             controller.UpdateMatchResultAsync(matchId, MatchEvent.HomeGoal));
+        
+        Assert.Contains("not found", exception.Message);
+        Assert.Equal("matchId", exception.ParamName);
     }
 
     [Fact]

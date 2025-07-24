@@ -14,6 +14,9 @@ public class MatchController
     public async Task<string> UpdateMatchResultAsync(int matchId, MatchEvent matchEvent)
     {
         var match = await _matchRepository.GetByIdAsync(matchId);
+        
+        if (match == null)
+            throw new ArgumentException($"Match with ID {matchId} not found", nameof(matchId));
 
         string currentResult = match.MatchResult;
         string newResult;
@@ -33,55 +36,13 @@ public class MatchController
                 if (!CanCancelGoal(currentResult, 'H'))
                     throw new UpdateMatchResultException("Cannot cancel goal if the last goal type is different with cancel goal type", matchEvent, currentResult);
 
-                // If the last character is a semicolon, don't delete the semicolon, but find and delete the last H
-                if (currentResult.Length > 0 && currentResult[^1] == ';')
-                {
-                    // Create a mutable character list
-                    var chars = currentResult.ToCharArray().ToList();
-
-                    // Search for H character from back to front
-                    for (int i = chars.Count - 2; i >= 0; i--)
-                    {
-                        if (chars[i] == 'H')
-                        {
-                            chars.RemoveAt(i); // Delete the found H
-                            break;
-                        }
-                    }
-
-                    newResult = new string(chars.ToArray());
-                }
-                else
-                {
-                    newResult = currentResult[..^1]; // Normal case, delete the last character
-                }
+                newResult = RemoveLastGoal(currentResult, 'H');
                 break;
             case MatchEvent.AwayCancel:
                 if (!CanCancelGoal(currentResult, 'A'))
                     throw new UpdateMatchResultException("Cannot cancel goal if the last goal type is different with cancel goal type", matchEvent, currentResult);
 
-                // If the last character is a semicolon, don't delete the semicolon, but find and delete the last A
-                if (currentResult.Length > 0 && currentResult[^1] == ';')
-                {
-                    // Create a mutable character list
-                    var chars = currentResult.ToCharArray().ToList();
-
-                    // Search for A character from back to front
-                    for (int i = chars.Count - 2; i >= 0; i--)
-                    {
-                        if (chars[i] == 'A')
-                        {
-                            chars.RemoveAt(i); // Delete the found A
-                            break;
-                        }
-                    }
-
-                    newResult = new string(chars.ToArray());
-                }
-                else
-                {
-                    newResult = currentResult[..^1]; // Normal case, delete the last character
-                }
+                newResult = RemoveLastGoal(currentResult, 'A');
                 break;
             default:
                 throw new ArgumentOutOfRangeException(nameof(matchEvent));
@@ -97,29 +58,36 @@ public class MatchController
         if (string.IsNullOrEmpty(result))
             return false;
 
-        // If the last character is a semicolon, we need to check the previous character
-        if (result[^1] == ';')
-        {
-            // Ensure there is a previous character to check
-            if (result.Length > 1)
-            {
-                // Find the last non-semicolon character
-                int i = result.Length - 2;
-                while (i >= 0 && result[i] == ';')
-                {
-                    i--;
-                }
+        // Get the last non-semicolon character to check if it matches the goal type
+        var lastGoalChar = result.TrimEnd(';').LastOrDefault();
+        return lastGoalChar == goalType;
+    }
 
-                // If a non-semicolon character is found, check if it is the target type
-                if (i >= 0)
-                {
-                    return result[i] == goalType;
-                }
+    private string RemoveLastGoal(string result, char goalType)
+    {
+        if (string.IsNullOrEmpty(result))
+            return result;
+
+        // If the last character is a semicolon, we need to remove the last occurrence of the goal type
+        if (result.EndsWith(";"))
+        {
+            // Find the last occurrence of the goal type before the semicolon
+            int lastIndex = result.LastIndexOf(goalType, result.Length - 2);
+            if (lastIndex >= 0)
+            {
+                return result.Remove(lastIndex, 1);
             }
-            return false;
+        }
+        else
+        {
+            // Simple case: just remove the last character if it matches the goal type
+            if (result.EndsWith(goalType.ToString()))
+            {
+                return result[..^1];
+            }
         }
 
-        return result[^1] == goalType;
+        return result;
     }
 
     public async Task<string> QueryMatchResult(int matchId)
