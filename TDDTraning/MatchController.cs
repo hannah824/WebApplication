@@ -24,14 +24,19 @@ public class UpdateMatchResultException : Exception
 
 public class MatchController
 {
-    private readonly Dictionary<int, Match> _matches = new();
+    private readonly IMatchRepository _matchRepository;
 
-    public string UpdateMatchResult(int matchId, MatchEvent matchEvent)
+    public MatchController(IMatchRepository matchRepository)
     {
-        if (!_matches.TryGetValue(matchId, out var match))
+        _matchRepository = matchRepository ?? throw new ArgumentNullException(nameof(matchRepository));
+    }
+
+    public async Task<string> UpdateMatchResultAsync(int matchId, MatchEvent matchEvent)
+    {
+        var match = await _matchRepository.GetByIdAsync(matchId);
+        if (match == null)
         {
             match = new Match { Id = matchId };
-            _matches[matchId] = match;
         }
 
         string currentResult = match.MatchResult;
@@ -107,6 +112,7 @@ public class MatchController
         }
 
         match.MatchResult = newResult;
+        await _matchRepository.UpdateAsync(match);
         return GetDisplayResult(newResult);
     }
 
@@ -172,10 +178,9 @@ public class MatchController
         return $"{homeGoals}:{awayGoals} ({period})";
     }
 
-    public string GetMatchResult(int matchId)
+    public async Task<string> GetMatchResultAsync(int matchId)
     {
-        if (_matches.TryGetValue(matchId, out var match))
-            return match.MatchResult;
-        return string.Empty;
+        var match = await _matchRepository.GetByIdAsync(matchId);
+        return match?.MatchResult ?? string.Empty;
     }
 }

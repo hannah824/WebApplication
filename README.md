@@ -1,68 +1,69 @@
-﻿# 足球比赛比分控制系统
+﻿* MatchController
+    * UpdateMatchResult(int matchId, enum MatchEvent): string
+        * DisplayResult: "1:0 (First Half)"
+        * UpdateMatchResiltException
+            * case1: Cannot cancel goal if the last goal type is different with cancel goal type
+    * MatchEvent:
+        * HomeGoal
+        * AwayGoal
+        * NextPeriod
+        * HomeCancel
+        * AwayCancel
+    * DB Table Schema
+        * Match
+            * Id int Pkey ex: 91
+            * MatchResilt string ex: "HHA;" (the corresponding display result is "2:1 (second half)"
+                * H HomeGoal
+                * A AwayGoal
+                * ; NextPeriod
 
-这是一个通过 TDD (测试驱动开发) 方法实现的足球比赛比分控制系统，用于管理和显示足球比赛的比分情况。
 
-## 功能概述
 
-系统提供以下功能：
+Scenario: Home Goal On the first half
+G:  The current display result "0:0 (First Half)" (match result "")
+W: match Event is HomeGoal
+T: display result should be "1:0 (First Half)"  (match result "H")
 
-- 记录主队进球 (HomeGoal)
-- 记录客队进球 (AwayGoal)
-- 进入下一个比赛阶段 (NextPeriod)
-- 取消主队进球 (HomeCancel)
-- 取消客队进球 (AwayCancel)
-- 以用户友好的格式显示当前比分
+Scenario: Away Goal On the second half
+G:  The current display result "1:1 (Second Half)" (match result "HA;")
+W: match Event is AwayGoal
+T: display result should be "1:2 (Second Half)"  (match result "HA;A")
 
-## 比分格式
+Scenario: Home Cancel
+G:  current display result "2:1 (First Half)" match result "HAH"
+W:HomeCancel
+T: display result will change to "HA" display result "1:1(First Half)"
 
-比分显示格式为：`主队得分:客队得分 (比赛阶段)`
+Scenario: Away Cancel
+G:  current display result "1:1 (Second Half)" match result "HA;"
+W:AwayCancel
+T: display result will change to "H;" display result "1:0 (Second Half)"
 
-例如：
-- "1:0 (First Half)" - 上半场，主队1分，客队0分
-- "2:1 (Second Half)" - 下半场，主队2分，客队1分
+Scenario: Change to next period
+G: The current display result "2:1 (First Half)" and match result "HAH"
+W: match change to second half
+T: The current display result should be "2:1 (Second Half)" and match result should be "HAH;"
 
-## 数据存储
+using WebApplication1.Models;
 
-比赛数据存储在 Match 对象中，使用特殊的字符串格式表示比赛结果：
+namespace WebApplication1.Repositories;
 
-- "H" 表示主队进球
-- "A" 表示客队进球
-- ";" 表示进入下一阶段
-
-例如：
-- "HAH" 表示上半场2:1（主队进球，客队进球，主队进球）
-- "HAH;" 表示下半场2:1（上半场结束后的得分）
-
-## 使用示例
-
-```csharp
-// 创建控制器
-var controller = new MatchController();
-int matchId = 91;
-
-// 主队进球
-string result = controller.UpdateMatchResult(matchId, MatchEvent.HomeGoal);
-// 显示 "1:0 (First Half)"
-
-// 客队进球
-result = controller.UpdateMatchResult(matchId, MatchEvent.AwayGoal);
-// 显示 "1:1 (First Half)"
-
-// 进入下半场
-result = controller.UpdateMatchResult(matchId, MatchEvent.NextPeriod);
-// 显示 "1:1 (Second Half)"
-```
-
-## 异常处理
-
-当尝试取消与最后一个进球类型不匹配的进球时，系统会抛出 `UpdateMatchResultException` 异常。
-
-## 分号处理
-
-当取消操作遇到分号(;)时，系统会保留分号，但会查找并删除最靠近分号的相应类型的进球标记。这确保了比赛阶段的记录（由分号表示）不会被取消操作影响，同时仍然能够取消先前阶段的进球。
-
-## 项目结构
-
-- `MatchController.cs` - 核心控制器类
-- `Match.cs` - 比赛数据模型
-- `MatchControllerTests.cs` - 单元测试
+/// <summary>
+/// Repository interface for match data operations
+/// </summary>
+public interface IMatchRepository
+{
+    /// <summary>
+    /// Gets a match by its ID
+    /// </summary>
+    /// <param name="matchId">The match ID</param>
+    /// <returns>The match if found, null otherwise</returns>
+    Task<Match?> GetByIdAsync(int matchId);
+    
+    /// <summary>
+    /// Updates a match in the database
+    /// </summary>
+    /// <param name="match">The match to update</param>
+    /// <returns>The updated match</returns>
+    Task<Match> UpdateAsync(Match match);
+} 
