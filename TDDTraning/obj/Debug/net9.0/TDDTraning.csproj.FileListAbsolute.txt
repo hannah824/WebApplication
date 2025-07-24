@@ -1,0 +1,15 @@
+C:\Users\hannah.wu39\RiderProjects\TDDTraning\TDDTraning\bin\Debug\net9.0\TDDTraning.exe
+C:\Users\hannah.wu39\RiderProjects\TDDTraning\TDDTraning\bin\Debug\net9.0\TDDTraning.deps.json
+C:\Users\hannah.wu39\RiderProjects\TDDTraning\TDDTraning\bin\Debug\net9.0\TDDTraning.runtimeconfig.json
+C:\Users\hannah.wu39\RiderProjects\TDDTraning\TDDTraning\bin\Debug\net9.0\TDDTraning.dll
+C:\Users\hannah.wu39\RiderProjects\TDDTraning\TDDTraning\bin\Debug\net9.0\TDDTraning.pdb
+C:\Users\hannah.wu39\RiderProjects\TDDTraning\TDDTraning\obj\Debug\net9.0\TDDTraning.GeneratedMSBuildEditorConfig.editorconfig
+C:\Users\hannah.wu39\RiderProjects\TDDTraning\TDDTraning\obj\Debug\net9.0\TDDTraning.AssemblyInfoInputs.cache
+C:\Users\hannah.wu39\RiderProjects\TDDTraning\TDDTraning\obj\Debug\net9.0\TDDTraning.AssemblyInfo.cs
+C:\Users\hannah.wu39\RiderProjects\TDDTraning\TDDTraning\obj\Debug\net9.0\TDDTraning.csproj.CoreCompileInputs.cache
+C:\Users\hannah.wu39\RiderProjects\TDDTraning\TDDTraning\obj\Debug\net9.0\TDDTraning.sourcelink.json
+C:\Users\hannah.wu39\RiderProjects\TDDTraning\TDDTraning\obj\Debug\net9.0\TDDTraning.dll
+C:\Users\hannah.wu39\RiderProjects\TDDTraning\TDDTraning\obj\Debug\net9.0\refint\TDDTraning.dll
+C:\Users\hannah.wu39\RiderProjects\TDDTraning\TDDTraning\obj\Debug\net9.0\TDDTraning.pdb
+C:\Users\hannah.wu39\RiderProjects\TDDTraning\TDDTraning\obj\Debug\net9.0\TDDTraning.genruntimeconfig.cache
+C:\Users\hannah.wu39\RiderProjects\TDDTraning\TDDTraning\obj\Debug\net9.0\ref\TDDTraning.dll
