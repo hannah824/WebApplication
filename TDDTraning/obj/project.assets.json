@@ -8,24 +8,19 @@
     "net9.0": []
   },
   "packageFolders": {
-    "C:\\Users\\hannah.wu39\\.nuget\\packages\\": {},
-    "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages": {}
+    "C:\\Users\\larson.gao85\\.nuget\\packages\\": {}
   },
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "C:\\Users\\hannah.wu39\\RiderProjects\\TDDTraning\\TDDTraning\\TDDTraning.csproj",
+      "projectUniqueName": "D:\\local_repo\\WebApplication\\TDDTraning\\TDDTraning.csproj",
       "projectName": "TDDTraning",
-      "projectPath": "C:\\Users\\hannah.wu39\\RiderProjects\\TDDTraning\\TDDTraning\\TDDTraning.csproj",
-      "packagesPath": "C:\\Users\\hannah.wu39\\.nuget\\packages\\",
-      "outputPath": "C:\\Users\\hannah.wu39\\RiderProjects\\TDDTraning\\TDDTraning\\obj\\",
+      "projectPath": "D:\\local_repo\\WebApplication\\TDDTraning\\TDDTraning.csproj",
+      "packagesPath": "C:\\Users\\larson.gao85\\.nuget\\packages\\",
+      "outputPath": "D:\\local_repo\\WebApplication\\TDDTraning\\obj\\",
       "projectStyle": "PackageReference",
-      "fallbackFolders": [
-        "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages"
-      ],
       "configFilePaths": [
-        "C:\\Users\\hannah.wu39\\AppData\\Roaming\\NuGet\\NuGet.Config",
-        "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.FallbackLocation.config",
+        "C:\\Users\\larson.gao85\\AppData\\Roaming\\NuGet\\NuGet.Config",
         "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
       ],
       "originalTargetFrameworks": [

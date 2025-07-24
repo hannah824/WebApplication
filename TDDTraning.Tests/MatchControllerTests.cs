@@ -115,6 +115,8 @@ public class MatchControllerTests
             () => controller.UpdateMatchResult(matchId, MatchEvent.HomeCancel));
 
         Assert.Equal("Cannot cancel goal if the last goal type is different with cancel goal type", exception.Message);
+        Assert.Equal(MatchEvent.HomeCancel, exception.MatchEvent);
+        Assert.Equal("HA", exception.OriginalMatchResult);
     }
 
     [Fact]
@@ -129,6 +131,27 @@ public class MatchControllerTests
             () => controller.UpdateMatchResult(matchId, MatchEvent.HomeCancel));
 
         Assert.Equal("Cannot cancel goal if the last goal type is different with cancel goal type", exception.Message);
+        Assert.Equal(MatchEvent.HomeCancel, exception.MatchEvent);
+        Assert.Equal("", exception.OriginalMatchResult);
+    }
+
+    [Fact]
+    public void UpdateMatchResult_AwayCancelWithDifferentType_ShouldThrowException()
+    {
+        // Arrange
+        var controller = new MatchController();
+        int matchId = 91;
+
+        // 设置先前的状态 - 只有主队进球
+        controller.UpdateMatchResult(matchId, MatchEvent.HomeGoal);
+
+        // Act & Assert
+        var exception = Assert.Throws<UpdateMatchResultException>(
+            () => controller.UpdateMatchResult(matchId, MatchEvent.AwayCancel));
+
+        Assert.Equal("Cannot cancel goal if the last goal type is different with cancel goal type", exception.Message);
+        Assert.Equal(MatchEvent.AwayCancel, exception.MatchEvent);
+        Assert.Equal("H", exception.OriginalMatchResult);
     }
 
     [Fact]

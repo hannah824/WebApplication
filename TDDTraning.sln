@@ -25,18 +25,3 @@ Global
 		{91F61DB8-EE6D-40B9-AA3C-4CB6C3C6C0B1}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 EndGlobal
-Microsoft Visual Studio Solution File, Format Version 12.00
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TDDTraning", "TDDTraning\TDDTraning.csproj", "{6986EEB0-F023-47C3-ABA0-CE540867FAAD}"
-EndProject
-Global
-	GlobalSection(SolutionConfigurationPlatforms) = preSolution
-		Debug|Any CPU = Debug|Any CPU
-		Release|Any CPU = Release|Any CPU
-	EndGlobalSection
-	GlobalSection(ProjectConfigurationPlatforms) = postSolution
-		{6986EEB0-F023-47C3-ABA0-CE540867FAAD}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{6986EEB0-F023-47C3-ABA0-CE540867FAAD}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{6986EEB0-F023-47C3-ABA0-CE540867FAAD}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{6986EEB0-F023-47C3-ABA0-CE540867FAAD}.Release|Any CPU.Build.0 = Release|Any CPU
-	EndGlobalSection
-EndGlobal

@@ -11,8 +11,14 @@ public enum MatchEvent
 
 public class UpdateMatchResultException : Exception
 {
-    public UpdateMatchResultException(string message) : base(message)
+    public MatchEvent MatchEvent { get; }
+    public string OriginalMatchResult { get; }
+
+    public UpdateMatchResultException(string message, MatchEvent matchEvent, string originalMatchResult) 
+        : base(message)
     {
+        MatchEvent = matchEvent;
+        OriginalMatchResult = originalMatchResult;
     }
 }
 
@@ -44,7 +50,7 @@ public class MatchController
                 break;
             case MatchEvent.HomeCancel:
                 if (!CanCancelGoal(currentResult, 'H'))
-                    throw new UpdateMatchResultException("Cannot cancel goal if the last goal type is different with cancel goal type");
+                    throw new UpdateMatchResultException("Cannot cancel goal if the last goal type is different with cancel goal type", matchEvent, currentResult);
 
                 // 如果最后一个字符是分号，不删除分号，而是寻找并删除最后一个H
                 if (currentResult.Length > 0 && currentResult[^1] == ';')
@@ -71,7 +77,7 @@ public class MatchController
                 break;
             case MatchEvent.AwayCancel:
                 if (!CanCancelGoal(currentResult, 'A'))
-                    throw new UpdateMatchResultException("Cannot cancel goal if the last goal type is different with cancel goal type");
+                    throw new UpdateMatchResultException("Cannot cancel goal if the last goal type is different with cancel goal type", matchEvent, currentResult);
 
                 // 如果最后一个字符是分号，不删除分号，而是寻找并删除最后一个A
                 if (currentResult.Length > 0 && currentResult[^1] == ';')
