@@ -14,12 +14,6 @@ public class MatchController
     public async Task<string> UpdateMatchResultAsync(int matchId, MatchEvent matchEvent)
     {
         var match = await _matchRepository.GetByIdAsync(matchId);
-        
-        // Create new match if it doesn't exist
-        if (match == null)
-        {
-            match = new Match { Id = matchId, MatchResult = string.Empty };
-        }
 
         string currentResult = match.MatchResult;
         string newResult;

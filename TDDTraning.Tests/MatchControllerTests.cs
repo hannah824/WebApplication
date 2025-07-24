@@ -13,10 +13,11 @@ public class MatchControllerTests
         var mockRepository = new Mock<IMatchRepository>();
         var controller = new MatchController(mockRepository.Object);
         int matchId = 91;
+        var match = new Match { Id = matchId, MatchResult = string.Empty };
 
         // Setup mock behavior
         mockRepository.Setup(r => r.GetByIdAsync(matchId))
-            .ReturnsAsync((Match?)null);
+            .ReturnsAsync(match);
 
         mockRepository.Setup(r => r.UpdateAsync(It.IsAny<Match>()))
             .ReturnsAsync((Match match) => match);
@@ -102,5 +103,22 @@ public class MatchControllerTests
         // Act & Assert
         var exception = Assert.Throws<ArgumentNullException>(() => new MatchController(null!));
         Assert.Equal("matchRepository", exception.ParamName);
+    }
+
+    [Fact]
+    public async Task UpdateMatchResult_WithNullMatch_ShouldThrowNullReferenceException()
+    {
+        // Arrange
+        var mockRepository = new Mock<IMatchRepository>();
+        var controller = new MatchController(mockRepository.Object);
+        int matchId = 999;
+
+        // Setup mock behavior to return null
+        mockRepository.Setup(r => r.GetByIdAsync(matchId))
+            .ReturnsAsync((Match?)null);
+
+        // Act & Assert
+        await Assert.ThrowsAsync<NullReferenceException>(() => 
+            controller.UpdateMatchResultAsync(matchId, MatchEvent.HomeGoal));
     }
 }
