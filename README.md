@@ -12,7 +12,7 @@
     * DB Table Schema
         * Match
             * Id int Pkey ex: 91
-            * MatchResilt string ex: "HHA;" (the corresponding display result is "2:1 (second half)"
+            * MatchResult string ex: "HHA;" (the corresponding display result is "2:1 (second half)"
                 * H HomeGoal
                 * A AwayGoal
                 * ; NextPeriod

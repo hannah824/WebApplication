@@ -47,16 +47,16 @@ public class Program
         Console.WriteLine($"Given: The current display result \"0:0 (First Half)\" (match result \"\")");
         Console.WriteLine("When: match Event is HomeGoal");
         var result1 = await controller.UpdateMatchResultAsync(matchId, MatchEvent.HomeGoal);
-        Console.WriteLine($"Then: display result should be \"{result1}\" (match result \"{await controller.GetMatchResultAsync(matchId)}\")");
+        Console.WriteLine($"Then: display result should be \"{result1}\" (match result \"{await controller.QueryMatchResult(matchId)}\")");
         Console.WriteLine();
         
         Console.WriteLine("Scenario 2: Away Goal On the second half");
-        Console.WriteLine($"Given: The current display result \"{result1}\" (match result \"{await controller.GetMatchResultAsync(matchId)}\")");
+        Console.WriteLine($"Given: The current display result \"{result1}\" (match result \"{await controller.QueryMatchResult(matchId)}\")");
         Console.WriteLine("When: match Event is AwayGoal");
         await controller.UpdateMatchResultAsync(matchId, MatchEvent.AwayGoal);
         await controller.UpdateMatchResultAsync(matchId, MatchEvent.NextPeriod);
         var result2 = await controller.UpdateMatchResultAsync(matchId, MatchEvent.AwayGoal);
-        Console.WriteLine($"Then: display result should be \"{result2}\" (match result \"{await controller.GetMatchResultAsync(matchId)}\")");
+        Console.WriteLine($"Then: display result should be \"{result2}\" (match result \"{await controller.QueryMatchResult(matchId)}\")");
         Console.WriteLine();
         
         // Reset for next scenario
@@ -70,7 +70,7 @@ public class Program
         await newController.UpdateMatchResultAsync(matchId, MatchEvent.HomeGoal);
         Console.WriteLine("When: HomeCancel");
         var result3 = await newController.UpdateMatchResultAsync(matchId, MatchEvent.HomeCancel);
-        Console.WriteLine($"Then: display result will change to \"{result3}\" (match result \"{await newController.GetMatchResultAsync(matchId)}\")");
+        Console.WriteLine($"Then: display result will change to \"{result3}\" (match result \"{await newController.QueryMatchResult(matchId)}\")");
         Console.WriteLine();
         
         // Reset for next scenario
@@ -84,7 +84,7 @@ public class Program
         await newController.UpdateMatchResultAsync(matchId, MatchEvent.NextPeriod);
         Console.WriteLine("When: AwayCancel");
         var result4 = await newController.UpdateMatchResultAsync(matchId, MatchEvent.AwayCancel);
-        Console.WriteLine($"Then: display result will change to \"{result4}\" (match result \"{await newController.GetMatchResultAsync(matchId)}\")");
+        Console.WriteLine($"Then: display result will change to \"{result4}\" (match result \"{await newController.QueryMatchResult(matchId)}\")");
         Console.WriteLine();
         
         // Reset for next scenario
@@ -98,6 +98,6 @@ public class Program
         await newController.UpdateMatchResultAsync(matchId, MatchEvent.HomeGoal);
         Console.WriteLine("When: match change to second half");
         var result5 = await newController.UpdateMatchResultAsync(matchId, MatchEvent.NextPeriod);
-        Console.WriteLine($"Then: The current display result should be \"{result5}\" and match result should be \"{await newController.GetMatchResultAsync(matchId)}\"");
+        Console.WriteLine($"Then: The current display result should be \"{result5}\" and match result should be \"{await newController.QueryMatchResult(matchId)}\"");
     }
 }

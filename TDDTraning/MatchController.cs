@@ -154,7 +154,7 @@ public class MatchController
         return $"{homeGoals}:{awayGoals} ({period})";
     }
 
-    public async Task<string> GetMatchResultAsync(int matchId)
+    public async Task<string> QueryMatchResult(int matchId)
     {
         var match = await _matchRepository.GetByIdAsync(matchId);
         return match?.MatchResult ?? string.Empty;

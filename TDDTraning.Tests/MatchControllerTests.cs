@@ -57,7 +57,7 @@ public class MatchControllerTests
     }
 
     [Fact]
-    public async Task GetMatchResultAsync_WithMoqRepository_ShouldReturnCorrectResult()
+    public async Task QueryMatchResult_WithMoqRepository_ShouldReturnCorrectResult()
     {
         // Arrange
         var mockRepository = new Mock<IMatchRepository>();
@@ -70,7 +70,7 @@ public class MatchControllerTests
             .ReturnsAsync(match);
 
         // Act
-        var result = await controller.GetMatchResultAsync(matchId);
+        var result = await controller.QueryMatchResult(matchId);
 
         // Assert
         Assert.Equal("HAH", result);
@@ -78,7 +78,7 @@ public class MatchControllerTests
     }
 
     [Fact]
-    public async Task GetMatchResultAsync_NonExistentMatch_ShouldReturnEmptyString()
+    public async Task QueryMatchResult_NonExistentMatch_ShouldReturnEmptyString()
     {
         // Arrange
         var mockRepository = new Mock<IMatchRepository>();
@@ -90,7 +90,7 @@ public class MatchControllerTests
             .ReturnsAsync((Match?)null);
 
         // Act
-        var result = await controller.GetMatchResultAsync(matchId);
+        var result = await controller.QueryMatchResult(matchId);
 
         // Assert
         Assert.Equal(string.Empty, result);
@@ -120,5 +120,89 @@ public class MatchControllerTests
         // Act & Assert
         await Assert.ThrowsAsync<NullReferenceException>(() => 
             controller.UpdateMatchResultAsync(matchId, MatchEvent.HomeGoal));
+    }
+
+    [Fact]
+    public async Task QueryMatchResult_EmptyMatchResult_ShouldReturnEmptyString()
+    {
+        // Arrange
+        var mockRepository = new Mock<IMatchRepository>();
+        var controller = new MatchController(mockRepository.Object);
+        int matchId = 91;
+        var match = new Match { Id = matchId, MatchResult = string.Empty };
+
+        // Setup mock behavior
+        mockRepository.Setup(r => r.GetByIdAsync(matchId))
+            .ReturnsAsync(match);
+
+        // Act
+        var result = await controller.QueryMatchResult(matchId);
+
+        // Assert
+        Assert.Equal(string.Empty, result);
+        mockRepository.Verify(r => r.GetByIdAsync(matchId), Times.Once);
+    }
+
+    [Fact]
+    public async Task QueryMatchResult_FirstHalfMatch_ShouldReturnCorrectResult()
+    {
+        // Arrange
+        var mockRepository = new Mock<IMatchRepository>();
+        var controller = new MatchController(mockRepository.Object);
+        int matchId = 91;
+        var match = new Match { Id = matchId, MatchResult = "H" };
+
+        // Setup mock behavior
+        mockRepository.Setup(r => r.GetByIdAsync(matchId))
+            .ReturnsAsync(match);
+
+        // Act
+        var result = await controller.QueryMatchResult(matchId);
+
+        // Assert
+        Assert.Equal("H", result);
+        mockRepository.Verify(r => r.GetByIdAsync(matchId), Times.Once);
+    }
+
+    [Fact]
+    public async Task QueryMatchResult_SecondHalfMatch_ShouldReturnCorrectResult()
+    {
+        // Arrange
+        var mockRepository = new Mock<IMatchRepository>();
+        var controller = new MatchController(mockRepository.Object);
+        int matchId = 91;
+        var match = new Match { Id = matchId, MatchResult = "HA;" };
+
+        // Setup mock behavior
+        mockRepository.Setup(r => r.GetByIdAsync(matchId))
+            .ReturnsAsync(match);
+
+        // Act
+        var result = await controller.QueryMatchResult(matchId);
+
+        // Assert
+        Assert.Equal("HA;", result);
+        mockRepository.Verify(r => r.GetByIdAsync(matchId), Times.Once);
+    }
+
+    [Fact]
+    public async Task QueryMatchResult_ComplexMatchResult_ShouldReturnCorrectResult()
+    {
+        // Arrange
+        var mockRepository = new Mock<IMatchRepository>();
+        var controller = new MatchController(mockRepository.Object);
+        int matchId = 91;
+        var match = new Match { Id = matchId, MatchResult = "HAH;A" };
+
+        // Setup mock behavior
+        mockRepository.Setup(r => r.GetByIdAsync(matchId))
+            .ReturnsAsync(match);
+
+        // Act
+        var result = await controller.QueryMatchResult(matchId);
+
+        // Assert
+        Assert.Equal("HAH;A", result);
+        mockRepository.Verify(r => r.GetByIdAsync(matchId), Times.Once);
     }
 }
