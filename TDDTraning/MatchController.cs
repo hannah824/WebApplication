@@ -13,7 +13,7 @@ public class MatchController
 
     public async Task<string> UpdateMatchResultAsync(int matchId, MatchEvent matchEvent)
     {
-        var match = await _matchRepository.GetByIdAsync(matchId);
+        var match = await _matchRepository.GetMatchByIdAsync(matchId);
         
         if (match == null)
             throw new ArgumentException($"Match with ID {matchId} not found", nameof(matchId));
@@ -92,7 +92,7 @@ public class MatchController
 
     public async Task<string> QueryMatchResult(int matchId)
     {
-        var match = await _matchRepository.GetByIdAsync(matchId);
+        var match = await _matchRepository.GetMatchByIdAsync(matchId);
         return match?.MatchResult ?? string.Empty;
     }
 }

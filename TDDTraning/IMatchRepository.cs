@@ -10,7 +10,7 @@ public interface IMatchRepository
     /// </summary>
     /// <param name="matchId">The match ID</param>
     /// <returns>The match if found, null otherwise</returns>
-    Task<Match?> GetByIdAsync(int matchId);
+    Task<Match?> GetMatchByIdAsync(int matchId);
     
     /// <summary>
     /// Updates a match in the database

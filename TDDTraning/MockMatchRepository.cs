@@ -12,7 +12,7 @@ public class MockMatchRepository : IMatchRepository
     /// </summary>
     /// <param name="matchId">The match ID</param>
     /// <returns>The match if found, null otherwise</returns>
-    public Task<Match?> GetByIdAsync(int matchId)
+    public Task<Match?> GetMatchByIdAsync(int matchId)
     {
         _matches.TryGetValue(matchId, out var match);
         return Task.FromResult(match);

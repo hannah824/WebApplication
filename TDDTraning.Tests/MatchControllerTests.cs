@@ -16,7 +16,7 @@ public class MatchControllerTests
         var match = new Match { Id = matchId, MatchResult = string.Empty };
 
         // Setup mock behavior
-        mockRepository.Setup(r => r.GetByIdAsync(matchId))
+        mockRepository.Setup(r => r.GetMatchByIdAsync(matchId))
             .ReturnsAsync(match);
 
         mockRepository.Setup(r => r.UpdateAsync(It.IsAny<Match>()))
@@ -27,7 +27,7 @@ public class MatchControllerTests
 
         // Assert
         Assert.Equal("1:0 (First Half)", result);
-        mockRepository.Verify(r => r.GetByIdAsync(matchId), Times.Once);
+        mockRepository.Verify(r => r.GetMatchByIdAsync(matchId), Times.Once);
         mockRepository.Verify(r => r.UpdateAsync(It.Is<Match>(m => m.Id == matchId && m.MatchResult == "H")), Times.Once);
     }
 
@@ -41,7 +41,7 @@ public class MatchControllerTests
         var existingMatch = new Match { Id = matchId, MatchResult = "H" };
 
         // Setup mock behavior
-        mockRepository.Setup(r => r.GetByIdAsync(matchId))
+        mockRepository.Setup(r => r.GetMatchByIdAsync(matchId))
             .ReturnsAsync(existingMatch);
 
         mockRepository.Setup(r => r.UpdateAsync(It.IsAny<Match>()))
@@ -52,7 +52,7 @@ public class MatchControllerTests
 
         // Assert
         Assert.Equal("1:1 (First Half)", result);
-        mockRepository.Verify(r => r.GetByIdAsync(matchId), Times.Once);
+        mockRepository.Verify(r => r.GetMatchByIdAsync(matchId), Times.Once);
         mockRepository.Verify(r => r.UpdateAsync(It.Is<Match>(m => m.Id == matchId && m.MatchResult == "HA")), Times.Once);
     }
 
@@ -66,7 +66,7 @@ public class MatchControllerTests
         var match = new Match { Id = matchId, MatchResult = "HAH" };
 
         // Setup mock behavior
-        mockRepository.Setup(r => r.GetByIdAsync(matchId))
+        mockRepository.Setup(r => r.GetMatchByIdAsync(matchId))
             .ReturnsAsync(match);
 
         // Act
@@ -74,7 +74,7 @@ public class MatchControllerTests
 
         // Assert
         Assert.Equal("HAH", result);
-        mockRepository.Verify(r => r.GetByIdAsync(matchId), Times.Once);
+        mockRepository.Verify(r => r.GetMatchByIdAsync(matchId), Times.Once);
     }
 
     [Fact]
@@ -86,7 +86,7 @@ public class MatchControllerTests
         int matchId = 999;
 
         // Setup mock behavior
-        mockRepository.Setup(r => r.GetByIdAsync(matchId))
+        mockRepository.Setup(r => r.GetMatchByIdAsync(matchId))
             .ReturnsAsync((Match?)null);
 
         // Act
@@ -94,7 +94,7 @@ public class MatchControllerTests
 
         // Assert
         Assert.Equal(string.Empty, result);
-        mockRepository.Verify(r => r.GetByIdAsync(matchId), Times.Once);
+        mockRepository.Verify(r => r.GetMatchByIdAsync(matchId), Times.Once);
     }
 
     [Fact]
@@ -114,7 +114,7 @@ public class MatchControllerTests
         int matchId = 999;
 
         // Setup mock behavior to return null
-        mockRepository.Setup(r => r.GetByIdAsync(matchId))
+        mockRepository.Setup(r => r.GetMatchByIdAsync(matchId))
             .ReturnsAsync((Match?)null);
 
         // Act & Assert
@@ -135,7 +135,7 @@ public class MatchControllerTests
         var match = new Match { Id = matchId, MatchResult = string.Empty };
 
         // Setup mock behavior
-        mockRepository.Setup(r => r.GetByIdAsync(matchId))
+        mockRepository.Setup(r => r.GetMatchByIdAsync(matchId))
             .ReturnsAsync(match);
 
         // Act
@@ -143,7 +143,7 @@ public class MatchControllerTests
 
         // Assert
         Assert.Equal(string.Empty, result);
-        mockRepository.Verify(r => r.GetByIdAsync(matchId), Times.Once);
+        mockRepository.Verify(r => r.GetMatchByIdAsync(matchId), Times.Once);
     }
 
     [Fact]
@@ -156,7 +156,7 @@ public class MatchControllerTests
         var match = new Match { Id = matchId, MatchResult = "H" };
 
         // Setup mock behavior
-        mockRepository.Setup(r => r.GetByIdAsync(matchId))
+        mockRepository.Setup(r => r.GetMatchByIdAsync(matchId))
             .ReturnsAsync(match);
 
         // Act
@@ -164,7 +164,7 @@ public class MatchControllerTests
 
         // Assert
         Assert.Equal("H", result);
-        mockRepository.Verify(r => r.GetByIdAsync(matchId), Times.Once);
+        mockRepository.Verify(r => r.GetMatchByIdAsync(matchId), Times.Once);
     }
 
     [Fact]
@@ -177,7 +177,7 @@ public class MatchControllerTests
         var match = new Match { Id = matchId, MatchResult = "HA;" };
 
         // Setup mock behavior
-        mockRepository.Setup(r => r.GetByIdAsync(matchId))
+        mockRepository.Setup(r => r.GetMatchByIdAsync(matchId))
             .ReturnsAsync(match);
 
         // Act
@@ -185,7 +185,7 @@ public class MatchControllerTests
 
         // Assert
         Assert.Equal("HA;", result);
-        mockRepository.Verify(r => r.GetByIdAsync(matchId), Times.Once);
+        mockRepository.Verify(r => r.GetMatchByIdAsync(matchId), Times.Once);
     }
 
     [Fact]
@@ -198,7 +198,7 @@ public class MatchControllerTests
         var match = new Match { Id = matchId, MatchResult = "HAH;A" };
 
         // Setup mock behavior
-        mockRepository.Setup(r => r.GetByIdAsync(matchId))
+        mockRepository.Setup(r => r.GetMatchByIdAsync(matchId))
             .ReturnsAsync(match);
 
         // Act
@@ -206,6 +206,6 @@ public class MatchControllerTests
 
         // Assert
         Assert.Equal("HAH;A", result);
-        mockRepository.Verify(r => r.GetByIdAsync(matchId), Times.Once);
+        mockRepository.Verify(r => r.GetMatchByIdAsync(matchId), Times.Once);
     }
 }
